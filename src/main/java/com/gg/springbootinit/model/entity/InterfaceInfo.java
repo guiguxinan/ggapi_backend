@@ -76,11 +76,6 @@ public class InterfaceInfo {
     @TableLogic
     private Integer isDelete;
 
-    /**
-     * 请求参数
-     */
-    private String requestParams;
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -104,8 +99,7 @@ public class InterfaceInfo {
             && (this.getMethod() == null ? other.getMethod() == null : this.getMethod().equals(other.getMethod()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()))
-            && (this.getRequestParams() == null ? other.getRequestParams() == null : this.getRequestParams().equals(other.getRequestParams()));
+            && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()));
     }
 
     @Override
@@ -124,7 +118,6 @@ public class InterfaceInfo {
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
-        result = prime * result + ((getRequestParams() == null) ? 0 : getRequestParams().hashCode());
         return result;
     }
 
@@ -146,7 +139,6 @@ public class InterfaceInfo {
         sb.append(", updateTime=").append(updateTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", isDelete=").append(isDelete);
-        sb.append(", requestParams=").append(requestParams);
         sb.append("]");
         return sb.toString();
     }

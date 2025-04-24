@@ -60,6 +60,12 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+ggapi:
+  client:
+    access-key: gg
+    secret-key: abcdefgh
+
+
 # 微信相关
 wx:
   # 微信公众平台
@@ -100,3 +106,4 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.gg.springbootinit.controller
+

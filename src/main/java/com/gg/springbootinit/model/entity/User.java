@@ -38,12 +38,12 @@ public class User implements Serializable {
     /**
      * 开放平台id
      */
-    private String unionId;
+//    private String unionId;
 
     /**
      * 公众号openId
      */
-    private String mpOpenId;
+//    private String mpOpenId;
 
     /**
      * 用户昵称
