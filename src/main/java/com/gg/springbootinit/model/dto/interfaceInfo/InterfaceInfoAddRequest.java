@@ -39,7 +39,7 @@ public class InterfaceInfoAddRequest implements Serializable {
     private String responseHeader;
 
     /**
-     * 接口状态 (0-关闭，1-开启)
+     * 接口状态 (0-开启，1-关闭)
      */
     private Integer status;
 
@@ -52,6 +52,11 @@ public class InterfaceInfoAddRequest implements Serializable {
      * 请求类型
      */
     private String method;
+
+    /**
+     * 请求参数
+     */
+    private String requestParams;
 
     /**
      * 更新时间

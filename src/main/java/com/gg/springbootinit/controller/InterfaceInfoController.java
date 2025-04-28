@@ -8,6 +8,7 @@ import com.gg.springbootinit.constant.UserConstant;
 import com.gg.springbootinit.exception.BusinessException;
 import com.gg.springbootinit.exception.ThrowUtils;
 import com.gg.springbootinit.model.dto.interfaceInfo.InterfaceInfoAddRequest;
+import com.gg.springbootinit.model.dto.interfaceInfo.InterfaceInfoInvokeRequest;
 import com.gg.springbootinit.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.gg.springbootinit.model.dto.interfaceInfo.InterfaceInfoUpdateRequest;
 import com.gg.springbootinit.model.entity.InterfaceInfo;
@@ -15,6 +16,7 @@ import com.gg.springbootinit.model.entity.User;
 import com.gg.springbootinit.model.enums.InterfaceInfoStatusEnum;
 import com.gg.springbootinit.service.InterfaceInfoService;
 import com.gg.springbootinit.service.UserService;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -191,6 +193,49 @@ public class InterfaceInfoController {
         // 返回一个成功的响应，响应体携带result值
         return ResultUtils.success(result);
     }
+
+    /**
+     * 测试接口调用
+     *
+     */
+    @PostMapping("/invoke")
+    // 这里给它新封装一个参数InterfaceInfoInvokeRequest
+    // 返回结果把对象发出去就好了,因为不确定接口的返回值到底是什么
+    public BaseResponse<String> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest, HttpServletRequest request) {
+        // 检查对象是否为空，接口id是否小于等于0
+        if (interfaceInfoInvokeRequest.getId() == null || interfaceInfoInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断该接口是否存在
+        // 获取interfaceInfoInvokeRequest对象的id属性
+        Long id = interfaceInfoInvokeRequest.getId();
+        // 获取用户请求参数
+        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        // 根据id查询接口信息数据
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        // 如果查询结果为空，则抛出异常
+        ThrowUtils.throwIf(interfaceInfo == null, ErrorCode.NOT_FOUND_ERROR);
+
+        // 检查接口状态是否为下线状态
+        if (interfaceInfo.getStatus() == InterfaceInfoStatusEnum.OFFLINE.getValue()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"接口已关闭");
+        }
+        // 获取当前登录用户的ak，sk，登录用户自己去调用
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        // 创建一个临时GgApiClient对象，并传入ak，sk
+        GgApiClient ggApiClient_temp = new GgApiClient(accessKey, secretKey);
+        // 我们只需要进行测试调用,所以我们需要解析传递过来的参数。
+        Gson gson = new Gson();
+        // 将用户请求参数转换为com.gg.ggapiclientsdk.model.User对象
+        com.gg.ggapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.gg.ggapiclientsdk.model.User.class);
+        // 调用ggApiClient的getUsernameByPost方法，传入用户对象，获取用户名
+        String userNameByPost = ggApiClient_temp.getUserNameByPost(user);
+        // 返回一个成功的响应，响应体携带 userNameByPost 值
+        return ResultUtils.success(userNameByPost);
+    }
+
     /**
      * 分页获取列表（仅管理员）
      *

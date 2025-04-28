@@ -23,6 +23,24 @@ create table if not exists user
     isDelete     tinyint      default 0                 not null comment '是否删除'
 ) comment '用户' collate = utf8mb4_unicode_ci;
 
+-- 接口表
+CREATE TABLE `interface_info` (
+                                  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                  `name` varchar(256) NOT NULL COMMENT '接口名称',
+                                  `description` varchar(256) DEFAULT NULL COMMENT '接口描述',
+                                  `url` varchar(512) NOT NULL COMMENT '接口地址',
+                                  `requestHeader` text COMMENT '请求头',
+                                  `responseHeader` text COMMENT '响应头',
+                                  `status` int(11) NOT NULL DEFAULT '0' COMMENT '接口状态 (0-开启，1-关闭)',
+                                  `requestParams` text NOT NULL COMMENT '请求参数',
+                                  `userId` bigint(20) NOT NULL COMMENT '创建人',
+                                  `method` varchar(256) NOT NULL COMMENT '请求类型',
+                                  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                  `isDelete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除(0-未删, 1-已删)',
+                                  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='接口信息';
+
 -- 帖子表
 create table if not exists post
 (
